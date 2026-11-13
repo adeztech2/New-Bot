@@ -1,0 +1,9 @@
+{
+  "name": "ADEZ-XMD",
+  "author": "Arnold Adez",
+  "scripts": {
+    "start": "node index.js",
+    "adez": "pm2 start index.js --attach --max-memory-restart 490M",
+    "pair": "node pair/server.js"
+  }
+}
