@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADEZ XMD - Pair</title>
+<style>
+  :root{--bg:#0b0f14;--card:#141b24;--fg:#e8eef5;--muted:#8b98a8;--accent:#00e676;--err:#ff5252}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);color:var(--fg);font-family:system-ui,sans-serif;padding:16px}
+  .card{width:100%;max-width:420px;background:var(--card);border-radius:16px;padding:28px 22px;text-align:center}
+  h1{font-size:1.7rem;color:var(--accent)}
+  p.sub{color:var(--muted);margin:8px 0 22px;font-size:.95rem}
+  input{width:100%;padding:14px;border-radius:10px;border:1px solid #2a3544;background:#0f151d;color:var(--fg);font-size:1rem;text-align:center}
+  button{margin-top:14px;width:100%;padding:14px;border:0;border-radius:10px;background:var(--accent);color:#04210f;font-weight:700;font-size:1rem}
+  button:disabled{opacity:.6}
+  #out{margin-top:20px;font-size:1.9rem;font-weight:800;letter-spacing:4px;color:var(--accent);word-break:break-all}
+  #msg{margin-top:12px;color:var(--muted);font-size:.9rem;line-height:1.5}
+  .err{color:var(--err)!important}
+  footer{margin-top:20px;color:var(--muted);font-size:.8rem}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>ADEZ XMD</h1>
+  <p class="sub">Link your WhatsApp and get your session ID</p>
+  <input id="num" type="tel" inputmode="numeric" placeholder="254111783552" autocomplete="off">
+  <button id="btn">Get Pairing Code</button>
+  <div id="out"></div>
+  <div id="msg"></div>
+  <footer>Owner: Arnold Adez · +254111783552</footer>
+</div>
+<script>
+const btn=document.getElementById('btn'),out=document.getElementById('out'),msg=document.getElementById('msg');
+btn.onclick=async()=>{
+  const n=document.getElementById('num').value.replace(/\D/g,'');
+  out.textContent='';msg.className='';msg.textContent='';
+  if(n.length<8){msg.className='err';msg.textContent='Enter a valid number.';return}
+  btn.disabled=true;btn.textContent='Generating...';
+  try{
+    const r=await fetch('/code?number='+n);const d=await r.json();
+    if(!r.ok)throw new Error(d.error||'Failed');
+    out.textContent=d.code;
+    msg.textContent='Enter this code in WhatsApp > Linked Devices. Your session ID arrives in your own chat.';
+  }catch(e){msg.className='err';msg.textContent=e.message}
+  btn.disabled=false;btn.textContent='Get Pairing Code';
+};
+</script>
+</body>
+</html>
